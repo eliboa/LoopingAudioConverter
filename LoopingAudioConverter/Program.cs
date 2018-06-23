@@ -8,6 +8,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using VGAudio.Containers.NintendoWare;
 
 namespace LoopingAudioConverter {
 	class Program {
@@ -53,7 +54,7 @@ namespace LoopingAudioConverter {
 			}
 
 			f.AddInputFiles(initialInputFiles);
-			
+
 			if (auto) {
 				Run(f.GetOptions(), showEndDialog: false);
 			} else {
@@ -95,8 +96,11 @@ namespace LoopingAudioConverter {
 				case ExporterType.BCSTM:
 					exporter = new CSTMExporter(o.BxstmCodec);
 					break;
-				case ExporterType.BFSTM:
-					exporter = new FSTMExporter(o.BxstmCodec);
+				case ExporterType.BFSTM_Cafe:
+					exporter = new FSTMExporter(o.BxstmCodec, NwTarget.Cafe);
+					break;
+				case ExporterType.BFSTM_NX:
+					exporter = new FSTMExporter(o.BxstmCodec, NwTarget.NX);
 					break;
 				case ExporterType.DSP:
 					exporter = new DSPExporter();
@@ -153,7 +157,7 @@ namespace LoopingAudioConverter {
 				window.ShowDialog();
 			})).Start();
 
-			Dictionary<string, Tuple<int, int>> loopOverrides = new Dictionary<string, Tuple<int, int>>();
+			Dictionary<string, Tuple<int, int, int>> loopOverrides = new Dictionary<string, Tuple<int, int, int>>();
 			if (File.Exists("loop.txt")) {
 				using (StreamReader sr = new StreamReader("loop.txt")) {
 					string line;
@@ -165,8 +169,10 @@ namespace LoopingAudioConverter {
 								line = line.Substring(line.IndexOf(" ") + 1);
 								int loopEnd = int.Parse(line.Substring(0, line.IndexOf(" ")));
 								line = line.Substring(line.IndexOf(" ") + 1);
+								int samplerate = int.Parse(line.Substring(0, line.IndexOf(" ")));
+								line = line.Substring(line.IndexOf(" ") + 1);
 
-								loopOverrides.Add(line, new Tuple<int, int>(loopStart, loopEnd));
+								loopOverrides.Add(line, new Tuple<int, int, int>(loopStart, loopEnd, samplerate));
 							} catch (Exception e) {
 								Console.Error.WriteLine("Could not parse line in loop.txt: " + line + " - " + e.Message);
 							}
@@ -236,13 +242,13 @@ namespace LoopingAudioConverter {
 				}
 
 				if (loopOverrides.Any()) {
-					if (loopOverrides.TryGetValue(Path.GetFileName(inputFile), out Tuple<int, int> val)) {
+					if (loopOverrides.TryGetValue(Path.GetFileName(inputFile), out Tuple<int, int, int> val)) {
 						if (val.Item1 < 0) {
 							w.Looping = false;
 						} else {
 							w.Looping = true;
-							w.LoopStart = val.Item1;
-							w.LoopEnd = val.Item2;
+							w.LoopStart = (int)((float)val.Item1 / val.Item3) * w.SampleRate; // use floats for division accuracy, then round back
+							w.LoopEnd = (int)((float)val.Item2 / val.Item3) * w.SampleRate;
 						}
 					}
 				}
@@ -368,6 +374,8 @@ namespace LoopingAudioConverter {
 				window.AllowClose = true;
 				window.Close();
 			}));
+
+			File.WriteAllText("./inloop.txt", WAVExporter.txt);
 
 			if (showEndDialog) {
 				MessageBox.Show("Exported " + exported.Count + " file(s), total time: " + (end - start));

@@ -10,7 +10,8 @@ namespace LoopingAudioConverter {
 	public enum ExporterType {
 		BRSTM,
 		BCSTM,
-		BFSTM,
+		BFSTM_NX,
+		BFSTM_Cafe,
 		DSP,
 		IDSP,
 		HCA,

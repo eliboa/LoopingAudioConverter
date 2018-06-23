@@ -51,9 +51,6 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="VGAudio, Version=2.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\VGAudio.2.2.0\lib\net45\VGAudio.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Brawl\FSTMExporter.cs" />
@@ -152,6 +149,10 @@
     <ProjectReference Include="..\brawltools\BrawlLib\BrawlLibAudio.csproj">
       <Project>{41c94979-ce5a-4582-888a-1bee98dd43d3}</Project>
       <Name>BrawlLibAudio</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\VGAudio\src\VGAudio\VGAudio.csproj">
+      <Project>{9a7ad23f-12fa-4b61-b341-5cf0192f2420}</Project>
+      <Name>VGAudio</Name>
     </ProjectReference>
     <ProjectReference Include="..\VorbisCommentSharp\VorbisCommentSharp.csproj">
       <Project>{5BD4854F-481B-4AA6-B838-32C21B2B069F}</Project>

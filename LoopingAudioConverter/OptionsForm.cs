@@ -45,7 +45,8 @@ namespace LoopingAudioConverter {
 			var exporters = new[] {
 				new NVPair<ExporterType>(ExporterType.BRSTM, "BRSTM"),
 				new NVPair<ExporterType>(ExporterType.BCSTM, "BCSTM"),
-				new NVPair<ExporterType>(ExporterType.BFSTM, "BFSTM"),
+				new NVPair<ExporterType>(ExporterType.BFSTM_Cafe, "BFSTM (Wii U)"),
+				new NVPair<ExporterType>(ExporterType.BFSTM_NX, "BFSTM (Switch)"),
 				new NVPair<ExporterType>(ExporterType.DSP, "DSP (Nintendo)"),
 				new NVPair<ExporterType>(ExporterType.IDSP, "IDSP"),
 				new NVPair<ExporterType>(ExporterType.HCA, "HCA"),
@@ -67,7 +68,8 @@ namespace LoopingAudioConverter {
 				switch ((ExporterType)comboBox1.SelectedValue) {
 					case ExporterType.BRSTM:
 					case ExporterType.BCSTM:
-					case ExporterType.BFSTM:
+					case ExporterType.BFSTM_NX:
+					case ExporterType.BFSTM_Cafe:
 						btnEncodingOptions.Visible = false;
 						ddlBxstmCodec.Visible = true;
 						break;
