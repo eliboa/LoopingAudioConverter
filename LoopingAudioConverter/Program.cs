@@ -54,7 +54,7 @@ namespace LoopingAudioConverter {
 			}
 
 			f.AddInputFiles(initialInputFiles);
-
+			
 			if (auto) {
 				Run(f.GetOptions(), showEndDialog: false);
 			} else {
@@ -74,6 +74,7 @@ namespace LoopingAudioConverter {
 			}
 
 			SoX sox = new SoX(ConfigurationManager.AppSettings["sox_path"]);
+			WAVExporter.txt = "";
 
 			List<IAudioImporter> importers = new List<IAudioImporter> {
 					new WAVImporter(),
@@ -247,8 +248,8 @@ namespace LoopingAudioConverter {
 							w.Looping = false;
 						} else {
 							w.Looping = true;
-							w.LoopStart = (int)((float)val.Item1 / val.Item3) * w.SampleRate; // use floats for division accuracy, then round back
-							w.LoopEnd = (int)((float)val.Item2 / val.Item3) * w.SampleRate;
+							w.LoopStart = (int)((float)val.Item1 / val.Item3 * (w.Samples.Length / w.Channels)); // use floats for division accuracy, then round back
+							w.LoopEnd = (int)((float)val.Item2 / val.Item3 * (w.Samples.Length / w.Channels));
 						}
 					}
 				}
