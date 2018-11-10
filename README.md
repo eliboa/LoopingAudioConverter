@@ -1,5 +1,9 @@
 # LoopingAudioConverter
 
+Works with BFSTM Switch format
+
+![Png](http://splatoon.eu/switch/LoopingAudioConverter.png)
+
 This application acts as a frontend to other programs and libraries, and allows conversion between the Wii .brstm format and a variety of other formats.
 
 Supported input formats:
